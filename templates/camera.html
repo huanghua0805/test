@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Webwset Push Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+
+
+<body>
+<img id="image" width="640" height="360" style="border:1px solid;background-color:lightgray"></img>
+<div class="content"></div>
+<div>
+    <button onclick="start()">开始预览</button>
+    <button onclick="stop()">停止预览</button>
+    <button onclick="fullscreen()">全屏</button>
+    <button onclick="window.location.href='/manage'">数据管理</button>
+</div>
+
+<script type="text/javascript">
+    if ("WebSocket" in window)
+    {
+        var image = document.getElementById("image");
+
+        var wsSock = "ws://192.168.1.122:9090/ws";
+        var token = "aaa";
+        var e = "topic1";
+
+        //var insert = "<p>Start connecting " + ws + "</p>";
+        //document.getElementsByClassName("content")[0].innerHTML += insert;
+
+        var ws = new WebSocket(wsSock);
+
+        ws.onopen = function() {
+            // 握手成功，连接建立
+            console.log("connected to " + ws);
+            //var insert = "<p>Connected to " + ws + "</p>";
+            //document.getElementsByClassName("content")[0].innerHTML += insert;
+
+            ws.send("{\"token\": \"" + token + "\", \"event\": \"" + e + "\"}")
+            //insert = "<p>Register message sent</p>";
+            //document.getElementsByClassName("content")[0].innerHTML += insert;
+            console.log('connection established');
+        };
+        ws.onmessage = function(event) {
+            // 更新图片
+            console.log("Receive message: " + event.data);
+            //var insert = "<p>Receive: " + event.data + "</p>";
+            //document.getElementsByClassName("content")[0].innerHTML += insert;
+            image.src="data:image/jpg;base64," + event.data;
+            // alert("I have received");
+        };
+        ws.onerror = function(event) {
+            // 通信发生错误
+            alert(event.data);
+        };
+        ws.onclose = function(event) {
+            // 连接关闭
+            console.log("connection closed (" + e.code + ")");
+            var insert = "<p>Connection be closed</p>";
+            document.getElementsByClassName("content")[0].innerHTML += insert;
+            console.log('connection closed [' + event.code + (event.reason != "" ? "," + event.reason : "") + "]");
+        };
+
+        function start() {
+            ws.send("start");
+        }
+        function stop() {
+            ws.send("stop");
+        }
+        function fullscreen() {
+            if ("requestFullscreen" in image)               // standard
+            {
+                image.requestFullscreen();
+            }
+            else if ("webkitRequestFullscreen" in image)    // Chrome, Safari, Opera
+            {
+                image.webkitRequestFullscreen();
+            }
+            else if ("mozRequestFullScreen" in image)       // Firefox
+            {
+                image.mozRequestFullScreen();
+            }
+            else if ("msRequestFullScreen" in image)        // Edge, IE
+            {
+                image.msRequestFullScreen();
+            }
+        }
+    }
+    else
+    {
+        alert("Your browser does not support WebSocket");
+    }
+
+</script>
+</body>
+
+</html>

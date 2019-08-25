@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Smart-Lab-Factory</title>
+    <link rel="shortcut icon" href="/static/TemplateData/favicon.ico">
+    <link rel="stylesheet" href="/static/TemplateData/style.css">
+    <script src="/static/TemplateData/UnityProgress.js"></script>
+    <script src="/static/Build/UnityLoader.js"></script>
+    <script>
+      var gameInstance = UnityLoader.instantiate("gameContainer", "/static/Build/Industry4.0.json", {onProgress: UnityProgress});
+    </script>
+    <script>
+	function Reset()
+	{
+	var canvas = document.getElementById("#canvas"); 
+	canvas.height= document.documentElement.clientHeight; 
+	canvas.width = document.documentElement.clientWidth;
+	}
+	</script>
+    <style>
+        h2{
+          background-color : #b6e1e0;
+        }
+       img{
+        vertical-align: middle;
+      }
+    </style>
+  </head>
+
+  <body onload="Reset()" onresize="Reset()">
+
+     <div class="webgl-content"style="width: 100%; height: 100%" >
+
+       <h2 >
+         <img src="/static/img/logo.jpg" width="25" height="25">
+         上海自主智能无人系统科学中心 —— 同济大学中德工程学院  工业4.0-智能工厂实验室
+         <img src="/static/img/CDHAW.jpg" width="100" height="28">
+        </h2>
+     <div id="gameContainer" style="width: 100%; height: 99%"></div>
+     </div>   
+  </body>
+</html>
